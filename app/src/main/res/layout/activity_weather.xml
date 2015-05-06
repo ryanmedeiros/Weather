@@ -10,7 +10,21 @@
     tools:context=".Weather">
 
     <TextView
+        android:id="@+id/prompt_user"
         android:text="@string/prompt_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/search_city"
+        android:hint="@string/search_city"
+        android:layout_below="@+id/prompt_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/search_button"
+        android:text="@string/search_button"
+        android:layout_alignTop="@+id/search_city"
+        android:layout_toRightOf="@+id/search_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
