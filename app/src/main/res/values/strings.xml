@@ -7,4 +7,10 @@
     <string name="prompt_user">Please input the City you wish to view</string>
     <string name="search_city">ex: London,ca</string>
     <string name="search_button">Search</string>
+
+    <!-- Weather Display Fields -->
+    <string name="temperature">T: </string>
+    <string name="humidity">H: </string>
+    <string name="pressure">P: </string>
+
 </resources>
