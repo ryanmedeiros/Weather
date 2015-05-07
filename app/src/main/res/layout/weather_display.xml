@@ -5,7 +5,23 @@
     android:layout_height="50dp">
 
     <TextView
+        android:id="@+id/temperature_text"
+        android:text="@string/temperature"
         android:layout_width="match_parent"
-        android:layout_height="25dp" />
-
+        android:layout_height="25dp"
+        android:layout_marginLeft="20dp"/>
+    <TextView
+        android:id="@+id/humidity_text"
+        android:text="@string/humidity"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/temperature_text"/>
+    <TextView
+        android:id="@+id/pressure_text"
+        android:text="@string/pressure"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/humidity_text"/>
 </RelativeLayout>
