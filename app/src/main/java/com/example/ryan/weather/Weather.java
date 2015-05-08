@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
 
     ProgressDialog weatherProgressDialog;
     JSONAdapter mJSONAdapter;
+    ListView weatherList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,9 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
         findByID();
         initializeDialog();
 
+        mJSONAdapter = new JSONAdapter(this,getLayoutInflater());
+        weatherList.setAdapter(mJSONAdapter);
+
         searchCityButton.setOnClickListener(this);
     }
 
@@ -47,6 +52,7 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
         promptUser=(TextView)findViewById(R.id.prompt_user);
         searchCity=(EditText)findViewById(R.id.search_city);
         searchCityButton=(Button)findViewById(R.id.search_button);
+        weatherList=(ListView)findViewById(R.id.weather_list);
     }
     public void initializeDialog(){
         weatherProgressDialog = new ProgressDialog(this);
@@ -79,9 +85,10 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         // What happens when the search button is clicked (searchCityButton)
+        queryWeather(searchCity.getText().toString());
     }
 
-    private void queryBooks(String searchString) {
+    private void queryWeather(String searchString) {
 
         // Prepare your search string to be put in a URL
         // It might have reserved characters or something
@@ -113,7 +120,7 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
                         Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
 
                         // update the data in your custom method.
-                        mJSONAdapter.updateData(jsonObject.optJSONArray("docs"));
+                        mJSONAdapter.updateData(jsonObject.optJSONArray("main"));
                     }
 
                     @Override

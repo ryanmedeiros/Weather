@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -19,22 +20,24 @@ public class JSONAdapter extends BaseAdapter {
 
     Context mContext;
     LayoutInflater mInflater;
-    JSONArray weatherAPI;
+    JSONObject weatherAPI;
 
     public JSONAdapter(Context context, LayoutInflater inflater){
         mContext = context;
         mInflater = inflater;
-        weatherAPI = new JSONArray();
+        weatherAPI = new JSONObject();
     }
 
     @Override
     public int getCount() {
+
         return weatherAPI.length();
     }
 
     @Override
     public Object getItem(int position) {
-        return weatherAPI.optJSONObject(position);
+
+        return null;
     }
 
     @Override
@@ -63,20 +66,20 @@ public class JSONAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        JSONObject weatherAPIObject = (JSONObject) getItem(position);
+
 
         String temperature = "";
         String humidity = "";
         String pressure = "";
 
-        if(weatherAPIObject.has("temp")){
-            temperature = String.valueOf(weatherAPIObject.optDouble("temp"));
+        if(weatherAPI.has("temp")){
+            temperature = weatherAPI.optString("temp");
         }
-        if (weatherAPIObject.has("humidity")){
-            humidity = String.valueOf(weatherAPIObject.optDouble("humidity"));
+        if (weatherAPI.has("humidity")){
+            humidity = weatherAPI.optString("humidity");
         }
-        if (weatherAPIObject.has("pressure")){
-            pressure = String.valueOf(weatherAPIObject.optDouble("pressure"));
+        if (weatherAPI.has("pressure")){
+            pressure = weatherAPI.optString("pressure");
         }
 
         holder.temperatureText.append(temperature);
@@ -88,7 +91,7 @@ public class JSONAdapter extends BaseAdapter {
 
 
     public void updateData(JSONArray jsonArray){
-        weatherAPI = jsonArray;
+       // weatherAPI = jsonArray;
         notifyDataSetChanged();
     }
     private static class ViewHolder {
