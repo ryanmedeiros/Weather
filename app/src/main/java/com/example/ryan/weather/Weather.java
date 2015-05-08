@@ -1,5 +1,6 @@
 package com.example.ryan.weather;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,12 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -27,6 +30,10 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
     EditText searchCity;
     Button searchCityButton;
 
+    ProgressDialog weatherProgressDialog;
+    JSONAdapter mJSONAdapter;
+    ListView weatherList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +41,10 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
 
         // Initialize all view fields by id
         findByID();
+        initializeDialog();
+
+        mJSONAdapter = new JSONAdapter(this,getLayoutInflater());
+        weatherList.setAdapter(mJSONAdapter);
 
         searchCityButton.setOnClickListener(this);
     }
@@ -42,6 +53,12 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
         promptUser=(TextView)findViewById(R.id.prompt_user);
         searchCity=(EditText)findViewById(R.id.search_city);
         searchCityButton=(Button)findViewById(R.id.search_button);
+        weatherList=(ListView)findViewById(R.id.weather_list);
+    }
+    public void initializeDialog(){
+        weatherProgressDialog = new ProgressDialog(this);
+        weatherProgressDialog.setMessage("Searching for City");
+        weatherProgressDialog.setCancelable(false);
     }
 
     @Override
@@ -69,9 +86,10 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         // What happens when the search button is clicked (searchCityButton)
+        queryWeather(searchCity.getText().toString());
     }
 
-    private void queryBooks(String searchString) {
+    private void queryWeather(String searchString) {
 
         // Prepare your search string to be put in a URL
         // It might have reserved characters or something
@@ -88,16 +106,33 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
         // Create a client to perform networking
         AsyncHttpClient client = new AsyncHttpClient();
 
+        weatherProgressDialog.show();
         // Have the client get a JSONArray of data
         // and define how to respond
         client.get(WEATHER_BASE_URL + urlString,
                 new JsonHttpResponseHandler() {
 
                     @Override
-                    public void onSuccess(JSONObject jsonObject) {}
+                    public void onSuccess(JSONObject jsonObject) {
+                        // 11. Dismiss the ProgressDialog
+                        weatherProgressDialog.dismiss();
+                        // Display a "Toast" message
+                        // to announce your success
+                        Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+
+                        // update the data in your custom method.
+                        try {
+                            mJSONAdapter.updateData(jsonObject.getJSONObject("main"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                     @Override
-                    public void onFailure(int statusCode, Throwable throwable, JSONObject error) {}
+                    public void onFailure(int statusCode, Throwable throwable, JSONObject error) {
+                        weatherProgressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(),"Could not find City",Toast.LENGTH_LONG).show();
+                    }
                 });
     }
 }
