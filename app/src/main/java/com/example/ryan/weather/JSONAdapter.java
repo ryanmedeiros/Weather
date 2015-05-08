@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.zip.Inflater;
@@ -59,6 +60,10 @@ public class JSONAdapter extends BaseAdapter {
             holder.humidityText = (TextView) convertView.findViewById(R.id.humidity_text);
             holder.pressureText = (TextView) convertView.findViewById(R.id.pressure_text);
 
+            holder.temperatureInput= (TextView) convertView.findViewById(R.id.temperature_input);
+            holder.humidityInput = (TextView) convertView.findViewById(R.id.humidity_input);
+            holder.pressureInput = (TextView) convertView.findViewById(R.id.pressure_input);
+
             // This will allow me to easily access the already inflated view
             convertView.setTag(holder);
         }
@@ -82,21 +87,24 @@ public class JSONAdapter extends BaseAdapter {
             pressure = weatherAPI.optString("pressure");
         }
 
-        holder.temperatureText.append(temperature);
-        holder.humidityText.append(humidity);
-        holder.pressureText.append(pressure);
+        holder.temperatureInput.setText(temperature);
+        holder.humidityInput.setText(humidity);
+        holder.pressureInput.setText(pressure);
 
         return convertView;
     }
 
 
-    public void updateData(JSONArray jsonArray){
-       // weatherAPI = jsonArray;
+    public void updateData(JSONObject jsonObject){
+        weatherAPI = jsonObject;
         notifyDataSetChanged();
     }
     private static class ViewHolder {
         public TextView temperatureText;
         public TextView humidityText;
         public TextView pressureText;
+        public TextView temperatureInput;
+        public TextView humidityInput;
+        public TextView pressureInput;
     }
 }

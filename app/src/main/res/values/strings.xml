@@ -9,8 +9,8 @@
     <string name="search_button">Search</string>
 
     <!-- Weather Display Fields -->
-    <string name="temperature">T: </string>
-    <string name="humidity">H: </string>
-    <string name="pressure">P: </string>
+    <string name="temperature">Temperature: </string>
+    <string name="humidity">Humidity: </string>
+    <string name="pressure">Pressure: </string>
 
 </resources>

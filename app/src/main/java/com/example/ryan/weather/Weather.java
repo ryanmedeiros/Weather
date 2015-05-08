@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -120,7 +121,11 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
                         Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
 
                         // update the data in your custom method.
-                        mJSONAdapter.updateData(jsonObject.optJSONArray("main"));
+                        try {
+                            mJSONAdapter.updateData(jsonObject.getJSONObject("main"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
