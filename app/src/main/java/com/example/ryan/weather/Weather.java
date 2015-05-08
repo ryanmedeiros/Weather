@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,13 +28,26 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
 
     public static final String WEATHER_BASE_URL =
             "http://api.openweathermap.org/data/2.5/weather?q=";
+    // main ui elements
     TextView promptUser;
     EditText searchCity;
     Button searchCityButton;
 
+    //for the different field views
+    TextView temperatureView;
+    TextView humidityView;
+    TextView pressureView;
+
+    //for the different areas where data is inputted
+    TextView temperatureInput;
+    TextView humidityInput;
+    TextView pressureInput;
+
+
     ProgressDialog weatherProgressDialog;
     JSONAdapter mJSONAdapter;
-    ListView weatherList;
+    ListView weatherView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +59,7 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
         initializeDialog();
 
         mJSONAdapter = new JSONAdapter(this,getLayoutInflater());
-        weatherList.setAdapter(mJSONAdapter);
+        //weatherView.setAdapter(mJSONAdapter);
 
         searchCityButton.setOnClickListener(this);
     }
@@ -53,7 +68,16 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
         promptUser=(TextView)findViewById(R.id.prompt_user);
         searchCity=(EditText)findViewById(R.id.search_city);
         searchCityButton=(Button)findViewById(R.id.search_button);
-        weatherList=(ListView)findViewById(R.id.weather_list);
+
+        temperatureView=(TextView)findViewById(R.id.temperature_text);
+        humidityView=(TextView)findViewById(R.id.humidity_text);
+        pressureView=(TextView)findViewById(R.id.pressure_text);
+
+        temperatureInput=(TextView)findViewById(R.id.temperature_input);
+        humidityInput=(TextView)findViewById(R.id.humidity_input);
+        pressureInput=(TextView)findViewById(R.id.pressure_input);
+
+        //weatherView=(RelativeLayout)findViewById(R.id.weather_layout);
     }
     public void initializeDialog(){
         weatherProgressDialog = new ProgressDialog(this);
@@ -120,12 +144,24 @@ public class Weather extends ActionBarActivity implements View.OnClickListener {
                         // to announce your success
                         Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
 
+                        try {
+                            jsonObject=jsonObject.getJSONObject("main");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        temperatureInput.setText(jsonObject.optString("temp"));
+                        humidityInput.setText(jsonObject.optString("humidity"));
+                        pressureInput.setText(jsonObject.optString("pressure"));
+
                         // update the data in your custom method.
+                        /*
                         try {
                             mJSONAdapter.updateData(jsonObject.getJSONObject("main"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        */
                     }
 
                     @Override
